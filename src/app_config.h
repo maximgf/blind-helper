@@ -1,10 +1,22 @@
 #pragma once
 
-/** Период опроса датчика дистанции (мс). */
+/** Период вывода измерений в UART (мс). */
 #define APP_MEASURE_INTERVAL_MS 500
+
+/** Период опроса датчика для hazard_filter (мс). */
+#define APP_HAZARD_SAMPLE_INTERVAL_MS 200
 
 /** Шаг главного цикла для tick мигания (мс). */
 #define APP_FEEDBACK_TICK_MS 5
+
+/**
+ * Порог приближения (мм/с): velocity ниже -N → объект приближается.
+ * (Дистанция уменьшается, velocity отрицательная.)
+ */
+#define HAZARD_V_APPROACH_MM_S 80
+
+/** Подряд замеров с приближением для включения индикации. */
+#define HAZARD_M_APPROACH_SAMPLES 2
 
 /** Верхняя граница рабочего диапазона (мм); дальше — обратная связь выключена. */
 #define DISTANCE_ZONE_MAX_MM 1000
