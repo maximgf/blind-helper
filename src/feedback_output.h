@@ -2,10 +2,10 @@
 
 /**
  * @file feedback_output.h
- * @brief Единый интерфейс тактильной/световой обратной связи (LED, вибромотор).
+ * @brief Абстракция индикатора для пользователя (свет или вибрация).
  *
- * Прикладной код задаёт период пульсации; реализация управляет GPIO (или PWM в будущем).
- * Конкретный исполнитель подключается через feedback_registry.c.
+ * Один и тот же API: задать «ритм» (period_ms) и крутить tick() в цикле.
+ * Замена LED на вибромотор — другой драйвер в feedback_registry, без правок логики.
  */
 
 #include <stdint.h>
@@ -16,9 +16,8 @@ struct feedback_output;
 
 typedef esp_err_t (*feedback_output_init_fn)(struct feedback_output *self);
 typedef esp_err_t (*feedback_output_deinit_fn)(struct feedback_output *self);
-/** @param period_ms полный период цикла вкл/выкл (мс); 0 — выключено. */
+/** period_ms — полный цикл вспышка/пауза; 0 — тишина. */
 typedef esp_err_t (*feedback_output_set_period_fn)(struct feedback_output *self, uint16_t period_ms);
-/** Вызывать периодически из главного цикла для поддержания мигания. */
 typedef esp_err_t (*feedback_output_tick_fn)(struct feedback_output *self);
 
 typedef struct feedback_output {

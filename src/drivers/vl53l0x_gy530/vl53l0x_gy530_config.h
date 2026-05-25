@@ -1,9 +1,15 @@
 #pragma once
 
+/**
+ * @file vl53l0x_gy530_config.h
+ * @brief Разводка GY-530 на ESP32-S3: I2C и XSHUT (включение лазера).
+ *
+ * XSHUT — «спящий режим» датчика; без импульса чип не отвечает на шине.
+ */
+
 #include "driver/gpio.h"
 #include "driver/i2c_types.h"
 
-/** Параметры модуля GY-530 (VL53L0X) — только этот драйвер их использует. */
 #define VL53L0X_GY530_I2C_PORT              I2C_NUM_0
 #define VL53L0X_GY530_I2C_SDA_GPIO          GPIO_NUM_4
 #define VL53L0X_GY530_I2C_SCL_GPIO          GPIO_NUM_5

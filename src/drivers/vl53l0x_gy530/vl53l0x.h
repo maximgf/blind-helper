@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @file vl53l0x.h
+ * @brief Низкоуровневый протокол чипа VL53L0X (регистры, калибровка, один замер).
+ */
+
 #include <stdbool.h>
 #include <stdint.h>
 

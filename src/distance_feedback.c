@@ -1,3 +1,8 @@
+/**
+ * @file distance_feedback.c
+ * @brief Оркестрация: замер → приближается ли? → как часто мигать.
+ */
+
 #include "distance_feedback.h"
 
 #include "app_config.h"
@@ -27,6 +32,7 @@ uint16_t distance_feedback_blink_period_ms(uint16_t mm)
     return FEEDBACK_BLINK_PERIOD_ZONE_4_MS;
 }
 
+/** Индикация только при APPROACHING; иначе LED/вибро выключены. */
 static uint16_t period_for_hazard(hazard_state_t hazard, uint16_t mm)
 {
     if (!hazard_filter_should_alert(hazard)) {
@@ -53,6 +59,7 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
     while (true) {
         TickType_t now = xTaskGetTickCount();
 
+        /* Частый опрос: успеть заметить сближение между шагами пользователя. */
         if ((int32_t)(now - next_hazard) >= 0) {
             uint16_t mm = DISTANCE_MM_INVALID;
             esp_err_t err = distance_sensor_read_mm(sensor, &mm);
@@ -65,6 +72,7 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
             next_hazard = now + hazard_ticks;
         }
 
+        /* Редкий лог для отладки на ПК, не влияет на индикацию. */
         if ((int32_t)(now - next_log) >= 0) {
             uint16_t mm = hazard_filter_get_last_mm();
             hazard_state_t hazard = hazard_filter_get_state();
@@ -81,6 +89,7 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
             next_log = now + log_ticks;
         }
 
+        /* Мигание обновляется независимо от опроса дальномера. */
         ESP_ERROR_CHECK(feedback_output_tick(feedback));
         vTaskDelay(feedback_step);
     }

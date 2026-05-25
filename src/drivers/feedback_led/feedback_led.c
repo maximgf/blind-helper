@@ -1,3 +1,10 @@
+/**
+ * @file feedback_led.c
+ * @brief Мигание GPIO: ритм задаёт прикладной слой, здесь только вкл/выкл по таймеру.
+ *
+ * Для вибромотора тот же period_ms — длительность «бзз-пауза».
+ */
+
 #include "drivers/feedback_led/feedback_led.h"
 
 #include "drivers/feedback_led/feedback_led_config.h"
@@ -60,6 +67,7 @@ static esp_err_t feedback_led_tick(feedback_output_t *self)
         return ESP_OK;
     }
 
+    /* 50% duty: половина period — светит, половина — пауза. */
     uint32_t half_period_us = (uint32_t)s_ctx.period_ms * 500U;
     int64_t now = esp_timer_get_time();
     if ((uint32_t)(now - s_ctx.last_toggle_us) >= half_period_us) {

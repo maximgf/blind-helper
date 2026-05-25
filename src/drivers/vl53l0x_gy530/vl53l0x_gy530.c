@@ -1,3 +1,10 @@
+/**
+ * @file vl53l0x_gy530.c
+ * @brief Дальномер «в луче» до ~2 м: время пролёта лазера → миллиметры.
+ *
+ * Один замер — одно расстояние по оси модуля (куда смотрит GY-530 на корпусе).
+ */
+
 #include "vl53l0x_gy530.h"
 
 #include "vl53l0x_gy530_config.h"
@@ -21,6 +28,7 @@ typedef struct {
 
 static vl53l0x_gy530_ctx_t s_ctx;
 
+/** Пробуждение чипа по XSHUT и поднятие I2C-шины. */
 static esp_err_t bus_init(vl53l0x_gy530_ctx_t *ctx)
 {
     esp_err_t ret;
@@ -84,6 +92,7 @@ static esp_err_t vl53l0x_gy530_init(distance_sensor_t *self)
     return vl53l0x_init(&ctx->vl53, VL53L0X_GY530_IO_2V8_MODE);
 }
 
+/** Одиночный снимок дистанции (мм) вдоль луча — для hazard_filter и зон мигания. */
 static esp_err_t vl53l0x_gy530_read_mm(distance_sensor_t *self, uint16_t *mm_out)
 {
     vl53l0x_gy530_ctx_t *ctx = self->impl;

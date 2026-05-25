@@ -1,3 +1,8 @@
+/**
+ * @file hazard_filter.c
+ * @brief Оценка скорости изменения дистанции между замерами ToF.
+ */
+
 #include "hazard_filter.h"
 
 #include "app_config.h"
@@ -9,7 +14,7 @@ static struct {
     uint16_t prev_mm;
     int64_t prev_time_us;
     bool prev_valid;
-    uint8_t approach_count;
+    uint8_t approach_count; /**< Подряд замеров с v «в минус». */
     hazard_state_t state;
     int32_t velocity_mm_s;
     uint16_t last_mm;
@@ -89,11 +94,6 @@ hazard_state_t hazard_filter_update(uint16_t mm, bool valid)
     s.last_mm = mm;
     update_velocity(mm, now_us);
 
-    /*
-     * Приближение: дистанция уменьшается → velocity_mm_s < 0.
-     * Вход в APPROACHING — после M подряд замеров; выход — сразу, как только
-     * скорость не указывает на приближение (стабильно или отдаляется).
-     */
     if (s.velocity_mm_s < -HAZARD_V_APPROACH_MM_S) {
         if (s.approach_count < UINT8_MAX) {
             s.approach_count++;
@@ -101,6 +101,7 @@ hazard_state_t hazard_filter_update(uint16_t mm, bool valid)
         if (s.approach_count >= HAZARD_M_APPROACH_SAMPLES) {
             s.state = HAZARD_APPROACHING;
         } else {
+            /* Ещё не подтвердили — не пугаем ложным срабатыванием. */
             s.state = HAZARD_STABLE;
         }
     } else {

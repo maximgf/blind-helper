@@ -2,10 +2,10 @@
 
 /**
  * @file distance_sensor.h
- * @brief Единый интерфейс датчиков дистанции для прикладного кода.
+ * @brief Абстракция лазерного дальномера (мм до препятствия в луче).
  *
- * Прикладной слой (main, distance_feedback) зависит только от этого API.
- * Конкретный датчик подключается через sensor_registry.c — см. комментарии там.
+ * Прикладной код не знает модель чипа — только read_mm().
+ * Реализация подставляется в sensor_registry.c (сейчас VL53L0X на GY-530).
  */
 
 #include <stdbool.h>
@@ -13,7 +13,7 @@
 
 #include "esp_err.h"
 
-/** Значение «измерение недоступно» (таймаут, ошибка шины и т.п.). */
+/** Нет достоверного замера (препятствие вне зоны, блик, сбой I2C). */
 #define DISTANCE_MM_INVALID 65535
 
 struct distance_sensor;
@@ -22,11 +22,7 @@ typedef esp_err_t (*distance_sensor_init_fn)(struct distance_sensor *self);
 typedef esp_err_t (*distance_sensor_deinit_fn)(struct distance_sensor *self);
 typedef esp_err_t (*distance_sensor_read_mm_fn)(struct distance_sensor *self, uint16_t *mm_out);
 
-/**
- * Дескриптор драйвера (vtable + непрозрачный контекст реализации).
- *
- * Реализация хранит своё состояние в @c impl и не раскрывает его наружу.
- */
+/** Виртуальная таблица драйвера; impl — внутреннее состояние (шина I2C и т.д.). */
 typedef struct distance_sensor {
     const char *name;
     distance_sensor_init_fn init;
