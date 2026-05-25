@@ -16,7 +16,7 @@
  * 5. Параметры пинов/шины держите в `drivers/<ваш_датчик>/<имя>_config.h`,
  *    не в прикладном коде.
  *
- * Файлы `distance_app.c` и `main.c` менять не нужно.
+ * Файлы `distance_feedback.c` и `main.c` менять не нужно.
  */
 
 #include "distance_sensor.h"
