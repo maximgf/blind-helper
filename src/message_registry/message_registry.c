@@ -3,7 +3,7 @@
  * @brief Фабрика активного канала сообщений.
  */
 
-#include "message_registry.h"
+#include "message_registry/message_registry.h"
 
 #include "sdkconfig.h"
 

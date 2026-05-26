@@ -3,10 +3,10 @@
  * @brief Оценка скорости изменения дистанции между замерами ToF.
  */
 
-#include "hazard_filter.h"
+#include "hazard_filter/hazard_filter.h"
 
-#include "app_config.h"
-#include "distance_sensor.h"
+#include "app_config/app_config.h"
+#include "distance_sensor/distance_sensor.h"
 
 #include "esp_timer.h"
 

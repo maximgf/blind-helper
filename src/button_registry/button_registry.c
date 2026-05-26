@@ -3,7 +3,7 @@
  * @brief Фабрика активной кнопки.
  */
 
-#include "button_registry.h"
+#include "button_registry/button_registry.h"
 
 #include "drivers/gpio_button/gpio_button.h"
 

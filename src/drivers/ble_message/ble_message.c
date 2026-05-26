@@ -21,16 +21,19 @@ static const char *TAG = "BLE_MSG";
 
 void ble_store_config_init(void);
 
+/** Callback NimBLE: стек сброшен, выводим причину в лог. */
 static void on_stack_reset(int reason)
 {
     ESP_LOGI(TAG, "nimble reset, reason=%d", reason);
 }
 
+/** Callback NimBLE: стек синхронизирован, можно запускать рекламу. */
 static void on_stack_sync(void)
 {
     ble_message_gap_adv_start();
 }
 
+/** Единая настройка host-callbacks перед запуском потока NimBLE. */
 static void nimble_host_config_init(void)
 {
     ble_hs_cfg.reset_cb = on_stack_reset;
@@ -87,6 +90,7 @@ static esp_err_t ble_message_send(user_message_t *self, const char *text)
     (void)self;
 
     ESP_LOGI(TAG, "%s", text != NULL ? text : "");
+    /* Кнопка работает в своей задаче: здесь только ставим SOS в отложенную отправку. */
     if (!ble_message_gatt_request_sos()) {
         return ESP_ERR_INVALID_STATE;
     }

@@ -10,8 +10,8 @@
 
 #include <stdint.h>
 
-#include "distance_sensor.h"
-#include "feedback_output.h"
+#include "distance_sensor/distance_sensor.h"
+#include "feedback_output/feedback_output.h"
 
 /** Период вспышек (мс) по зоне дистанции; 0 — не в рабочем диапазоне. */
 uint16_t distance_feedback_blink_period_ms(uint16_t mm);

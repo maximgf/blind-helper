@@ -3,7 +3,7 @@
  * @brief Фабрика активного индикатора обратной связи.
  */
 
-#include "feedback_registry.h"
+#include "feedback_registry/feedback_registry.h"
 
 #include "drivers/feedback_led/feedback_led.h"
 

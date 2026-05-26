@@ -5,7 +5,7 @@
 
 #include "drivers/ble_message/ble_message_gatt.h"
 
-#include "app_config.h"
+#include "app_config/app_config.h"
 #include "drivers/ble_message/ble_message_config.h"
 
 #include <string.h>
@@ -45,8 +45,10 @@ static uint16_t s_last_distance_cm;
 static uint8_t s_last_sos;
 static uint8_t s_last_status;
 static uint8_t s_last_battery = BLE_MSG_BATTERY_DEFAULT_PERCENT;
+/** SOS-флаг, установленный задачей кнопки; сбрасывается после попытки notify. */
 static volatile bool s_sos_pending;
 
+/** Общий helper для notify-характеристик с одинаковыми проверками состояния. */
 static int chr_notify(uint16_t val_handle, bool notify_enabled, const uint8_t *data, uint16_t len)
 {
     if (data == NULL || len == 0) {
@@ -259,6 +261,7 @@ static void update_notify_flag(uint16_t attr_handle, bool enabled)
 
 void ble_message_gatt_subscribe_cb(struct ble_gap_event *event)
 {
+    /* На некоторых стеках подписка приходит раньше локального CONNECT-callback. */
     s_conn_handle = event->subscribe.conn_handle;
     update_notify_flag(event->subscribe.attr_handle, event->subscribe.cur_notify);
     ESP_LOGI(TAG, "subscribe attr=%u notify=%d", event->subscribe.attr_handle,
@@ -317,6 +320,7 @@ int ble_message_gatt_notify_distance(uint16_t distance_cm)
 
 int ble_message_gatt_notify_sos(void)
 {
+    /* Инкремент значения нужен, чтобы Android гарантированно получил change-event. */
     s_last_sos++;
     if (s_last_sos == 0) {
         s_last_sos = 1;

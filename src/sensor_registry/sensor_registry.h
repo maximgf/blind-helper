@@ -8,7 +8,7 @@
  * только реализация distance_sensor_t и вызов здесь.
  */
 
-#include "distance_sensor.h"
+#include "distance_sensor/distance_sensor.h"
 #include "esp_err.h"
 
 esp_err_t distance_sensor_get_active(distance_sensor_t *out);

@@ -3,9 +3,9 @@
  * @brief Опрос кнопки и вызов user_message_send при нажатии.
  */
 
-#include "button_notify.h"
+#include "button_notify/button_notify.h"
 
-#include "app_config.h"
+#include "app_config/app_config.h"
 
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"

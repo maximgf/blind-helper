@@ -7,17 +7,17 @@
  * Кнопка — SOS notify по BLE (GATT AA02), дублируется в UART-лог.
  */
 
-#include "button_input.h"
-#include "button_notify.h"
-#include "button_registry.h"
-#include "distance_feedback.h"
-#include "distance_sensor.h"
+#include "button_input/button_input.h"
+#include "button_notify/button_notify.h"
+#include "button_registry/button_registry.h"
+#include "distance_feedback/distance_feedback.h"
+#include "distance_sensor/distance_sensor.h"
 #include "esp_err.h"
-#include "feedback_output.h"
-#include "feedback_registry.h"
-#include "message_registry.h"
-#include "sensor_registry.h"
-#include "user_message.h"
+#include "feedback_output/feedback_output.h"
+#include "feedback_registry/feedback_registry.h"
+#include "message_registry/message_registry.h"
+#include "sensor_registry/sensor_registry.h"
+#include "user_message/user_message.h"
 
 void app_main(void)
 {

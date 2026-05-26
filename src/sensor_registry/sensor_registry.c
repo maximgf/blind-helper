@@ -3,7 +3,7 @@
  * @brief Фабрика активного дальномера.
  */
 
-#include "sensor_registry.h"
+#include "sensor_registry/sensor_registry.h"
 
 #include "drivers/vl53l0x_gy530/vl53l0x_gy530.h"
 

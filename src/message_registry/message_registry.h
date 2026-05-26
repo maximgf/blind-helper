@@ -8,6 +8,6 @@
  */
 
 #include "esp_err.h"
-#include "user_message.h"
+#include "user_message/user_message.h"
 
 esp_err_t user_message_get_active(user_message_t *out);

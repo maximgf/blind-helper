@@ -8,6 +8,6 @@
  */
 
 #include "esp_err.h"
-#include "feedback_output.h"
+#include "feedback_output/feedback_output.h"
 
 esp_err_t feedback_output_get_active(feedback_output_t *out);

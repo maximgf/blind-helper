@@ -10,7 +10,7 @@
 #include "vl53l0x_gy530_config.h"
 #include "vl53l0x.h"
 
-#include "distance_sensor.h"
+#include "distance_sensor/distance_sensor.h"
 
 #include "driver/gpio.h"
 #include "driver/i2c_master.h"

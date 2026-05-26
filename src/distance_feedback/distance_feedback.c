@@ -3,11 +3,11 @@
  * @brief Оркестрация: замер → приближается ли? → как часто мигать.
  */
 
-#include "distance_feedback.h"
+#include "distance_feedback/distance_feedback.h"
 
-#include "app_config.h"
-#include "distance_sensor.h"
-#include "hazard_filter.h"
+#include "app_config/app_config.h"
+#include "distance_sensor/distance_sensor.h"
+#include "hazard_filter/hazard_filter.h"
 #include "sdkconfig.h"
 
 #if CONFIG_BT_NIMBLE_ENABLED
@@ -65,6 +65,7 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
         TickType_t now = xTaskGetTickCount();
 
 #if CONFIG_BT_NIMBLE_ENABLED
+        /* BLE-отправка выполняется в том же контексте, что и остальная телеметрия. */
         ble_message_gatt_flush_pending();
 #endif
 
@@ -97,6 +98,7 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
 
 #if CONFIG_BT_NIMBLE_ENABLED
             {
+                /* BLE-пакеты дистанции/статуса идут с тем же ритмом, что и UART-лог. */
                 const bool valid = (mm != DISTANCE_MM_INVALID);
                 const uint8_t status = ble_message_gatt_status_from_hazard(hazard, valid);
                 (void)ble_message_gatt_notify_status(status);
