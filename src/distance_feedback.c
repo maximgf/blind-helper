@@ -8,6 +8,11 @@
 #include "app_config.h"
 #include "distance_sensor.h"
 #include "hazard_filter.h"
+#include "sdkconfig.h"
+
+#if CONFIG_BT_NIMBLE_ENABLED
+#include "drivers/ble_message/ble_message_gatt.h"
+#endif
 
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -17,16 +22,16 @@ static const char *TAG = "DIST_FEEDBACK";
 
 uint16_t distance_feedback_blink_period_ms(uint16_t mm)
 {
-    if (mm == DISTANCE_MM_INVALID || mm > DISTANCE_ZONE_MAX_MM) {
+    if (mm == DISTANCE_MM_INVALID || mm > app_config_zone_max_mm()) {
         return 0;
     }
-    if (mm <= DISTANCE_ZONE_1_MAX_MM) {
+    if (mm <= app_config_zone1_max_mm()) {
         return FEEDBACK_BLINK_PERIOD_ZONE_1_MS;
     }
-    if (mm <= DISTANCE_ZONE_2_MAX_MM) {
+    if (mm <= app_config_zone2_max_mm()) {
         return FEEDBACK_BLINK_PERIOD_ZONE_2_MS;
     }
-    if (mm <= DISTANCE_ZONE_3_MAX_MM) {
+    if (mm <= app_config_zone3_max_mm()) {
         return FEEDBACK_BLINK_PERIOD_ZONE_3_MS;
     }
     return FEEDBACK_BLINK_PERIOD_ZONE_4_MS;
@@ -59,6 +64,10 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
     while (true) {
         TickType_t now = xTaskGetTickCount();
 
+#if CONFIG_BT_NIMBLE_ENABLED
+        ble_message_gatt_flush_pending();
+#endif
+
         /* Частый опрос: успеть заметить сближение между шагами пользователя. */
         if ((int32_t)(now - next_hazard) >= 0) {
             uint16_t mm = DISTANCE_MM_INVALID;
@@ -85,6 +94,18 @@ void distance_feedback_run(distance_sensor_t *sensor, feedback_output_t *feedbac
                 ESP_LOGI(TAG, "Distance: %u mm (%.2f m), v %ld mm/s, hazard %s, blink %u ms", mm,
                          mm / 1000.0f, (long)velocity, hazard_filter_state_name(hazard), period_ms);
             }
+
+#if CONFIG_BT_NIMBLE_ENABLED
+            {
+                const bool valid = (mm != DISTANCE_MM_INVALID);
+                const uint8_t status = ble_message_gatt_status_from_hazard(hazard, valid);
+                (void)ble_message_gatt_notify_status(status);
+                if (valid) {
+                    const uint16_t distance_cm = (uint16_t)((mm + 5U) / 10U);
+                    (void)ble_message_gatt_notify_distance(distance_cm);
+                }
+            }
+#endif
 
             next_log = now + log_ticks;
         }

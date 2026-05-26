@@ -83,7 +83,7 @@ hazard_state_t hazard_filter_update(uint16_t mm, bool valid)
 {
     int64_t now_us = esp_timer_get_time();
 
-    if (!valid || mm == DISTANCE_MM_INVALID || mm > DISTANCE_ZONE_MAX_MM) {
+    if (!valid || mm == DISTANCE_MM_INVALID || mm > app_config_zone_max_mm()) {
         s.state = HAZARD_NONE;
         s.approach_count = 0;
         s.prev_valid = false;

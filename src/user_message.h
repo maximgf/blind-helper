@@ -4,7 +4,7 @@
  * @file user_message.h
  * @brief Канал сообщений пользователю (сопровождающему, телефону).
  *
- * Сейчас — UART/монитор; позже — BLE без правок прикладной логики кнопки.
+ * Сейчас — NimBLE GATT notify; fallback — UART (см. message_registry).
  */
 
 #include "esp_err.h"

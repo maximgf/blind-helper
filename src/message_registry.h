@@ -4,7 +4,7 @@
  * @file message_registry.h
  * @brief Куда уходит сообщение пользователю (консоль, позже BLE).
  *
- * При CONFIG_BLE_MESH — BLE Mesh (drivers/ble_message), иначе UART.
+ * При CONFIG_BT_NIMBLE_ENABLED — BLE GATT VibroGuide (drivers/ble_message), иначе UART.
  */
 
 #include "esp_err.h"

@@ -2,32 +2,17 @@
 
 /**
  * @file ble_message_config.h
- * @brief Идентификаторы BLE Mesh для события «кнопка помощи».
- *
- * Company ID 0x02E5 — Espressif (как в примерах IDF); для своего приложения
- * позже можно заменить на выделенный SIG Company ID.
+ * @brief GATT VibroGuide — совместим с src_android/Constants.kt.
  */
 
-#include <stdint.h>
+/** Имя в BLE-рекламе (видно при сканировании в приложении). */
+#define BLE_MSG_DEVICE_NAME             "VibroGuide"
 
-#include "esp_ble_mesh_defs.h"
+/** Минимальная длина записи CONFIG (4× uint16 LE, см). */
+#define BLE_MSG_CONFIG_MIN_LEN          8
 
-#define BLE_MSG_CID_ESP                     0x02E5
+/** Значение notify SOS (любой байт — приложение реагирует на факт notify). */
+#define BLE_MSG_SOS_NOTIFY_VALUE        0x01
 
-/** Vendor model ID на узле (сервер). */
-#define BLE_MSG_VND_MODEL_ID_SERVER         0x0001
-
-/** Групповой адрес публикации (подписка на телефоне / provisioner). */
-#define BLE_MSG_HELP_GROUP_ADDR             0xC000
-
-/** UUID-префикс непровиженного устройства (2 байта + MAC в ble_mesh_get_dev_uuid). */
-#define BLE_MSG_DEV_UUID_PREFIX_BYTE0       0xB1
-#define BLE_MSG_DEV_UUID_PREFIX_BYTE1       0x48
-
-/** Opcodes vendor model (3-octet, company ID в младших битах). */
-#define BLE_MSG_OP_HELP_NOTIFY              ESP_BLE_MESH_MODEL_OP_3(0x10, BLE_MSG_CID_ESP)
-
-#define BLE_MSG_MAX_TEXT_LEN                40
-
-/** Тип события в payload. */
-#define BLE_MSG_EVENT_HELP_BUTTON           0x01
+/** Уровень батареи по умолчанию, если нет измерения АКБ. */
+#define BLE_MSG_BATTERY_DEFAULT_PERCENT 100

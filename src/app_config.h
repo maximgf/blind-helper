@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 /** Как часто печатать диагностику в UART (мс). */
 #define APP_MEASURE_INTERVAL_MS 500
 
@@ -42,3 +44,13 @@
 #define FEEDBACK_BLINK_PERIOD_ZONE_2_MS 300
 #define FEEDBACK_BLINK_PERIOD_ZONE_3_MS 600
 #define FEEDBACK_BLINK_PERIOD_ZONE_4_MS 1200
+
+/** Пороги зон (мм); по умолчанию — макросы выше, меняются через BLE CONFIG. */
+uint16_t app_config_zone_max_mm(void);
+uint16_t app_config_zone1_max_mm(void);
+uint16_t app_config_zone2_max_mm(void);
+uint16_t app_config_zone3_max_mm(void);
+
+/** Пороги из приложения: safe, warn, near, critical (см), как в VibroGuideApp. */
+void app_config_set_vibro_thresholds_cm(uint16_t safe_cm, uint16_t warn_cm, uint16_t near_cm,
+                                        uint16_t critical_cm);
