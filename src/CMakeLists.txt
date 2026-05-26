@@ -6,5 +6,5 @@ file(GLOB_RECURSE app_sources "${CMAKE_SOURCE_DIR}/src/*.c")
 idf_component_register(
     SRCS ${app_sources}
     INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/src"
-    REQUIRES driver esp_rom esp_timer freertos
+    REQUIRES bt driver esp_rom esp_timer freertos nvs_flash
 )

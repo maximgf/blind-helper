@@ -88,6 +88,7 @@ hazard_state_t hazard_filter_update(uint16_t mm, bool valid)
         s.approach_count = 0;
         s.prev_valid = false;
         s.velocity_mm_s = 0;
+        s.last_mm = DISTANCE_MM_INVALID;
         return s.state;
     }
 

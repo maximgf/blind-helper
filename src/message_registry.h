@@ -4,7 +4,7 @@
  * @file message_registry.h
  * @brief Куда уходит сообщение пользователю (консоль, позже BLE).
  *
- * Единственное место замены «UART → BLE» для всего приложения.
+ * При CONFIG_BLE_MESH — BLE Mesh (drivers/ble_message), иначе UART.
  */
 
 #include "esp_err.h"
