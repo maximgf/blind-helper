@@ -74,7 +74,4 @@ flowchart TB
 | I2C SDA | 4 | vl53l0x_gy530 |
 | I2C SCL | 5 | vl53l0x_gy530 |
 | LED | 6 | feedback_led |
-| XSHUT | 7 | vl53l0x_gy530 |
 | Кнопка | 8 | gpio_button |
-
-Совместимость с Android: `src_android/` (`Constants.kt`, `VibroGuideService.kt`).
